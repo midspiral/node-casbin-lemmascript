@@ -16,6 +16,7 @@ import * as rbac from '../rbac';
 import * as util from '../util';
 import { Config, ConfigInterface } from '../config';
 import { Assertion } from './assertion';
+import { ruleMatches, filterPolicies } from './getFilteredPolicy';
 import { getLogger, logPrint } from '../log';
 import { DefaultRoleManager } from '../rbac';
 import { EffectExpress, FieldIndex } from '../constants';
@@ -374,27 +375,11 @@ export class Model {
 
   // getFilteredPolicy gets rules based on field filters from a policy.
   public getFilteredPolicy(sec: string, key: string, fieldIndex: number, ...fieldValues: string[]): string[][] {
-    const res: string[][] = [];
     const ast = this.model.get(sec)?.get(key);
     if (!ast) {
-      return res;
+      return [];
     }
-    for (const rule of ast.policy) {
-      let matched = true;
-      for (let i = 0; i < fieldValues.length; i++) {
-        const fieldValue = fieldValues[i];
-        if (fieldValue !== '' && rule[fieldIndex + i] !== fieldValue) {
-          matched = false;
-          break;
-        }
-      }
-
-      if (matched) {
-        res.push(rule);
-      }
-    }
-
-    return res;
+    return filterPolicies(ast.policy, fieldValues, fieldIndex, ast.policy.length, fieldValues.length);
   }
 
   // removeFilteredPolicy removes policy rules based on field filters from the model.

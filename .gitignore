@@ -5,3 +5,7 @@ lib
 yarn-error.log
 package-lock.json
 coverage
+
+.lake/
+
+*.dfy.patch

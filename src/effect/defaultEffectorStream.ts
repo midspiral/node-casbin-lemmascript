@@ -15,64 +15,53 @@
 import { EffectorStream } from './effectorStream';
 import { Effect } from './effector';
 import { EffectExpress } from '../constants';
+import type { Mode, Eft, EffectState } from './effectorPure';
+import { pushEffectStep } from './effectorPure';
+
+function toMode(expr: string): Mode {
+  switch (expr) {
+    case EffectExpress.ALLOW:
+      return 'allow';
+    case EffectExpress.DENY:
+      return 'deny';
+    case EffectExpress.ALLOW_AND_DENY:
+      return 'allow_and_deny';
+    case EffectExpress.PRIORITY:
+    case EffectExpress.SUBJECT_PRIORITY:
+      return 'priority';
+    default:
+      throw new Error('unsupported effect');
+  }
+}
+
+function toEft(eft: Effect): Eft {
+  switch (eft) {
+    case Effect.Allow:
+      return 'allow';
+    case Effect.Deny:
+      return 'deny';
+    default:
+      return 'indeterminate';
+  }
+}
 
 /**
- * DefaultEffectorStream is the default implementation of EffectorStream.
+ * DefaultEffectorStream — delegates to the verified pure function pushEffectStep.
  */
 export class DefaultEffectorStream implements EffectorStream {
-  private done = false;
-  private res = false;
-  private rec = false;
-  private readonly expr: string;
+  private state: EffectState = { res: false, recorded: false, done: false };
+  private readonly mode: Mode;
 
   constructor(expr: string) {
-    this.expr = expr;
+    this.mode = toMode(expr);
   }
 
   current(): boolean {
-    return this.res;
+    return this.state.res;
   }
 
   public pushEffect(eft: Effect): [boolean, boolean, boolean] {
-    switch (this.expr) {
-      case EffectExpress.ALLOW:
-        if (eft === Effect.Allow) {
-          this.res = true;
-          this.done = true;
-          this.rec = true;
-        }
-        break;
-      case EffectExpress.DENY:
-        this.res = true;
-        if (eft === Effect.Deny) {
-          this.res = false;
-          this.done = true;
-          this.rec = true;
-        }
-        break;
-      case EffectExpress.ALLOW_AND_DENY:
-        if (eft === Effect.Allow) {
-          this.res = true;
-          this.rec = true;
-        } else if (eft === Effect.Deny) {
-          this.res = false;
-          this.done = true;
-          this.rec = true;
-        } else {
-          this.rec = false;
-        }
-        break;
-      case EffectExpress.PRIORITY:
-      case EffectExpress.SUBJECT_PRIORITY:
-        if (eft !== Effect.Indeterminate) {
-          this.res = eft === Effect.Allow;
-          this.done = true;
-          this.rec = true;
-        }
-        break;
-      default:
-        throw new Error('unsupported effect');
-    }
-    return [this.res, this.rec, this.done];
+    this.state = pushEffectStep(this.mode, toEft(eft), this.state);
+    return [this.state.res, this.state.recorded, this.state.done];
   }
 }

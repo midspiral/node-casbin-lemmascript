@@ -22,20 +22,8 @@ function regexMatch(key1: string, key2: string): boolean {
 }
 
 // keyMatch determines whether key1 matches the pattern of key2 (similar to RESTful path),
-// key2 can contain a *.
-// For example, '/foo/bar' matches '/foo/*'
-function keyMatch(key1: string, key2: string): boolean {
-  const pos: number = key2.indexOf('*');
-  if (pos === -1) {
-    return key1 === key2;
-  }
-
-  if (key1.length > pos) {
-    return key1.slice(0, pos) === key2.slice(0, pos);
-  }
-
-  return key1 === key2.slice(0, pos);
-}
+// Verified with LemmaScript — see src/util/keyMatch.ts
+import { keyMatch } from './keyMatch';
 
 // keyMatchFunc is the wrapper for keyMatch.
 function keyMatchFunc(...args: any[]): boolean {
@@ -46,21 +34,8 @@ function keyMatchFunc(...args: any[]): boolean {
   return keyMatch(name1, name2);
 }
 
-// KeyGet returns the matched part
-// For example, "/foo/bar/foo" matches "/foo/*"
-// "bar/foo" will been returned
-function keyGet(key1: string, key2: string): string {
-  const pos: number = key2.indexOf('*');
-  if (pos === -1) {
-    return '';
-  }
-  if (key1.length > pos) {
-    if (key1.slice(0, pos) === key2.slice(0, pos)) {
-      return key1.slice(pos, key1.length);
-    }
-  }
-  return '';
-}
+// Verified with LemmaScript — see src/util/keyGet.ts
+import { keyGet } from './keyGet';
 
 // keyGetFunc is the wrapper for keyGet.
 function keyGetFunc(...args: any[]): string {
