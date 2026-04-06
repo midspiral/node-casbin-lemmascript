@@ -7,5 +7,3 @@ package-lock.json
 coverage
 
 .lake/
-
-*.dfy.patch
