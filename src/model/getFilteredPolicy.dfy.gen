@@ -30,7 +30,7 @@ method filterPolicies(policies: seq<seq<string>>, fieldValues: seq<string>, fiel
   requires (numFields <= |fieldValues|)
   requires forall i: nat :: ((i < numPolicies) ==> ((fieldIndex + numFields) <= |policies[i]|))
 {
-  var result := [];
+  var result: seq<seq<string>> := [];
   var i := 0;
   while (i < numPolicies)
     invariant (i <= numPolicies)
