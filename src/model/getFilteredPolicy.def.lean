@@ -42,6 +42,6 @@ method filterPolicies (policies : Array (Array String)) (fieldValues : Array Str
     do
       let _t0 ← ruleMatches policies[i]! fieldValues fieldIndex numFields
       if _t0 then
-        result := Array.push result policies[i]!
+        result := result ++ #[policies[i]!]
       i := i + 1
     return result
