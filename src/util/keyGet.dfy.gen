@@ -13,19 +13,24 @@ function StringIndexOfFrom(s: string, sub: string, from: nat): int
   else StringIndexOfFrom(s, sub, from + 1)
 }
 
-method keyGet(key1: string, key2: string) returns (res: string)
-  ensures ((StringIndexOf(key2, "*") == -1) ==> (res == ""))
-  ensures ((|key1| <= StringIndexOf(key2, "*")) ==> (res == ""))
-  ensures ((StringIndexOf(key2, "*") >= 0) ==> (StringIndexOf(key2, "*") <= |key1|) ==> (StringIndexOf(key2, "*") <= |key2|) ==> (key1[0..StringIndexOf(key2, "*")] != key2[0..StringIndexOf(key2, "*")]) ==> (res == ""))
+function keyGet(key1: string, key2: string): string
 {
   var pos := StringIndexOf(key2, "*");
-  if (pos == -1) {
-    return "";
-  }
-  if (|key1| > pos) {
-    if (key1[0..pos] == key2[0..pos]) {
-      return key1[pos..|key1|];
-    }
-  }
-  return "";
+  if (pos == -1) then
+    ""
+  else
+    if (|key1| > pos) then
+      if (key1[0..pos] == key2[0..pos]) then
+        key1[pos..|key1|]
+      else
+        ""
+    else
+      ""
+}
+
+lemma keyGet_ensures(key1: string, key2: string)
+  ensures ((StringIndexOf(key2, "*") == -1) ==> (keyGet(key1, key2) == ""))
+  ensures ((|key1| <= StringIndexOf(key2, "*")) ==> (keyGet(key1, key2) == ""))
+  ensures ((StringIndexOf(key2, "*") >= 0) ==> (StringIndexOf(key2, "*") <= |key1|) ==> (StringIndexOf(key2, "*") <= |key2|) ==> (key1[0..StringIndexOf(key2, "*")] != key2[0..StringIndexOf(key2, "*")]) ==> (keyGet(key1, key2) == ""))
+{
 }
