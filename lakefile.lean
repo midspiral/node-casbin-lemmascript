@@ -73,7 +73,7 @@ lean_lib Effector where
 @[default_target]
 lean_lib Util where
   srcDir := "src/util"
-  roots := #[`«arrayEquals.def», `«arrayEquals.proof», `«keyMatch.types», `«keyMatch.def», `«keyMatch.proof», `«keyGet.def», `«keyGet.proof»]
+  roots := #[`«arrayEquals.def», `«arrayEquals.proof», `«keyMatch.types», `«keyMatch.def», `«keyMatch.proof», `«keyGet.types», `«keyGet.def», `«keyGet.proof»]
   extraDepTargets := #[``downloadDependencies]
 
 @[default_target]

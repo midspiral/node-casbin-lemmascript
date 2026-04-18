@@ -28,29 +28,29 @@ def pushEffectStep (mode : Mode) (eft : Eft) (state : EffectState) : EffectState
   if state.done then
     state
   else
-    if mode = .allow then
-      if eft = .allow then
+    if mode = Mode.allow then
+      if eft = Eft.allow then
         { res := true, recorded := true, done := true }
       else
         { res := state.res, recorded := false, done := false }
     else
-      if mode = .deny then
-        if eft = .deny then
+      if mode = Mode.deny then
+        if eft = Eft.deny then
           { res := false, recorded := true, done := true }
         else
           { res := true, recorded := false, done := false }
       else
-        if mode = .allow_and_deny then
-          if eft = .allow then
+        if mode = Mode.allow_and_deny then
+          if eft = Eft.allow then
             { res := true, recorded := true, done := false }
           else
-            if eft = .deny then
+            if eft = Eft.deny then
               { res := false, recorded := true, done := true }
             else
               { res := state.res, recorded := false, done := false }
         else
-          if eft ≠ .indeterminate then
-            { res := eft = .allow, recorded := true, done := true }
+          if eft ≠ Eft.indeterminate then
+            { res := eft = Eft.allow, recorded := true, done := true }
           else
             { res := state.res, recorded := false, done := false }
 

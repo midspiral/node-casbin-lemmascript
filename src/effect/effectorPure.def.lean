@@ -9,13 +9,13 @@ set_option loom.semantics.choice "demonic"
 
 method pushEffectStep (mode : Mode) (eft : Eft) (state : EffectState) return (res : EffectState)
   ensures state.done = true → res = state
-  ensures state.done = false → mode = .allow → eft = .allow → res.res = true ∧ res.done = true
-  ensures state.done = false → mode = .deny → eft = .deny → res.res = false ∧ res.done = true
-  ensures state.done = false → mode = .priority → eft ≠ .indeterminate → res.done = true
-  ensures state.done = false → mode = .priority → eft = .allow → res.res = true
-  ensures state.done = false → mode = .priority → eft = .deny → res.res = false
-  ensures state.done = false → mode = .allow → eft ≠ .allow → res.done = false
-  ensures state.done = false → mode = .deny → eft ≠ .deny → res.done = false
+  ensures state.done = false → mode = Mode.allow → eft = Eft.allow → res.res = true ∧ res.done = true
+  ensures state.done = false → mode = Mode.deny → eft = Eft.deny → res.res = false ∧ res.done = true
+  ensures state.done = false → mode = Mode.priority → eft ≠ Eft.indeterminate → res.done = true
+  ensures state.done = false → mode = Mode.priority → eft = Eft.allow → res.res = true
+  ensures state.done = false → mode = Mode.priority → eft = Eft.deny → res.res = false
+  ensures state.done = false → mode = Mode.allow → eft ≠ Eft.allow → res.done = false
+  ensures state.done = false → mode = Mode.deny → eft ≠ Eft.deny → res.done = false
   do
     return Pure.pushEffectStep mode eft state
 
@@ -25,8 +25,8 @@ method processEffects (mode : Mode) (effects : Array Eft) return (res : EffectSt
     let mut i : Nat := 0
     while i < effects.size
       invariant i ≤ effects.size
-      invariant mode = .allow → state.done = true → state.res = true
-      invariant mode = .deny → state.done = true → state.res = false
+      invariant mode = Mode.allow → state.done = true → state.res = true
+      invariant mode = Mode.deny → state.done = true → state.res = false
       decreasing effects.size - i
     do
       state ← pushEffectStep mode effects[i]! state
