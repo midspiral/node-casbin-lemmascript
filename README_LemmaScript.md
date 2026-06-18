@@ -1,5 +1,8 @@
 # Casbin Effector — Verified with LemmaScript
 
+[![LemmaScript: verified](https://img.shields.io/badge/LemmaScript-verified-brightgreen)](https://github.com/midspiral/node-casbin-lemmascript/actions/workflows/lemmascript.yml)
+
+
 This is a fork of [apache/casbin-node-casbin](https://github.com/apache/casbin-node-casbin) with formal verification of the Effector module using [LemmaScript](https://github.com/midspiral/LemmaScript). [View as Diff](https://github.com/midspiral/node-casbin-lemmascript/compare/2e66ca9cea3c05aa06775e5d75437724d1ff71f7..HEAD).
 
 The Effector is the security-critical component that combines per-rule Allow/Deny/Indeterminate effects into a single boolean access decision. A bug here means an access bypass. We formally verify it using LemmaScript — annotating the TypeScript directly with specifications and proving correctness in Lean 4.
