@@ -1,6 +1,6 @@
 # Casbin Effector — Verified with LemmaScript
 
-[![LemmaScript: verified](https://img.shields.io/badge/LemmaScript-verified-brightgreen)](https://github.com/midspiral/node-casbin-lemmascript/actions/workflows/lemmascript.yml)
+[![LemmaScript verified](https://img.shields.io/github/actions/workflow/status/midspiral/node-casbin-lemmascript/lemmascript.yml?branch=lemmascript&label=LemmaScript%20verified)](https://github.com/midspiral/node-casbin-lemmascript/actions/workflows/lemmascript.yml)
 
 
 This is a fork of [apache/casbin-node-casbin](https://github.com/apache/casbin-node-casbin) with formal verification of the Effector module using [LemmaScript](https://github.com/midspiral/LemmaScript). [View as Diff](https://github.com/midspiral/node-casbin-lemmascript/compare/2e66ca9cea3c05aa06775e5d75437724d1ff71f7..HEAD).
