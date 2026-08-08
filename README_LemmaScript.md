@@ -103,7 +103,7 @@ To regenerate after TS changes: `npx tsx ../lemmascript/tools/src/lsc.ts regen -
 1. Add `//@ ` annotations to TypeScript:
 
    ```typescript
-   //@ ensures state.done === true ==> \result === state
+   //@ ensures implies(state.done === true, $result === state)
    ```
 
 2. Generate Lean (the generated files are checked in, but to regenerate after changing annotations):

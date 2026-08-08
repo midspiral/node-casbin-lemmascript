@@ -11,16 +11,16 @@ export function ruleMatches(rule: string[], fieldValues: string[], fieldIndex: n
   //@ type i nat
   //@ requires numFields <= fieldValues.length
   //@ requires fieldIndex + numFields <= rule.length
-  //@ ensures \result === false ==> exists(k: nat, k < numFields && fieldValues[k] !== '' && rule[fieldIndex + k] !== fieldValues[k])
-  //@ ensures \result === true ==> forall(k: nat, k < numFields ==> fieldValues[k] === '' || rule[fieldIndex + k] === fieldValues[k])
+  //@ ensures implies($result === false, exists((k: nat) => k < numFields && fieldValues[k] !== "" && rule[fieldIndex + k] !== fieldValues[k]))
+  //@ ensures implies($result === true, forall((k: nat) => implies(k < numFields, fieldValues[k] === "" || rule[fieldIndex + k] === fieldValues[k])))
 
   let matched = true;
   let i = 0;
   while (i < numFields) {
     //@ decreases numFields - i
     //@ invariant i <= numFields
-    //@ invariant matched === true ==> forall(k: nat, k < i ==> fieldValues[k] === '' || rule[fieldIndex + k] === fieldValues[k])
-    //@ invariant matched === false ==> exists(k: nat, k < numFields && fieldValues[k] !== '' && rule[fieldIndex + k] !== fieldValues[k])
+    //@ invariant implies(matched === true, forall((k: nat) => implies(k < i, fieldValues[k] === "" || rule[fieldIndex + k] === fieldValues[k])))
+    //@ invariant implies(matched === false, exists((k: nat) => k < numFields && fieldValues[k] !== "" && rule[fieldIndex + k] !== fieldValues[k]))
     //@ done_with matched === false || !(i < numFields)
     if (fieldValues[i] !== '') {
       if (rule[fieldIndex + i] !== fieldValues[i]) {
@@ -50,7 +50,7 @@ export function filterPolicies(
   //@ type i nat
   //@ requires numPolicies <= policies.length
   //@ requires numFields <= fieldValues.length
-  //@ requires forall(i: nat, i < numPolicies ==> fieldIndex + numFields <= policies[i].length)
+  //@ requires forall((i: nat) => implies(i < numPolicies, fieldIndex + numFields <= policies[i].length))
 
   let result: string[][] = [];
   let i = 0;

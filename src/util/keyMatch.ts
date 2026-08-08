@@ -6,7 +6,7 @@
 
 export function keyMatch(key1: string, key2: string): boolean {
   //@ type pos int
-  //@ ensures key1 === key2 ==> \result === true
+  //@ ensures implies(key1 === key2, $result === true)
 
   const pos = key2.indexOf('*');
   if (pos === -1) {

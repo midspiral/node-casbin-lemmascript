@@ -13,14 +13,14 @@ export interface EffectState {
 }
 
 export function pushEffectStep(mode: Mode, eft: Eft, state: EffectState): EffectState {
-  //@ ensures state.done === true ==> \result === state
-  //@ ensures state.done === false && mode === "allow" && eft === "allow" ==> \result.res === true && \result.done === true
-  //@ ensures state.done === false && mode === "deny" && eft === "deny" ==> \result.res === false && \result.done === true
-  //@ ensures state.done === false && mode === "priority" && eft !== "indeterminate" ==> \result.done === true
-  //@ ensures state.done === false && mode === "priority" && eft === "allow" ==> \result.res === true
-  //@ ensures state.done === false && mode === "priority" && eft === "deny" ==> \result.res === false
-  //@ ensures state.done === false && mode === "allow" && eft !== "allow" ==> \result.done === false
-  //@ ensures state.done === false && mode === "deny" && eft !== "deny" ==> \result.done === false
+  //@ ensures implies(state.done === true, $result === state)
+  //@ ensures implies(state.done === false && mode === "allow" && eft === "allow", $result.res === true && $result.done === true)
+  //@ ensures implies(state.done === false && mode === "deny" && eft === "deny", $result.res === false && $result.done === true)
+  //@ ensures implies(state.done === false && mode === "priority" && eft !== "indeterminate", $result.done === true)
+  //@ ensures implies(state.done === false && mode === "priority" && eft === "allow", $result.res === true)
+  //@ ensures implies(state.done === false && mode === "priority" && eft === "deny", $result.res === false)
+  //@ ensures implies(state.done === false && mode === "allow" && eft !== "allow", $result.done === false)
+  //@ ensures implies(state.done === false && mode === "deny" && eft !== "deny", $result.done === false)
 
   if (state.done) return state;
 
@@ -54,8 +54,8 @@ export function processEffects(mode: Mode, effects: Eft[]): EffectState {
   let i = 0;
   while (i < effects.length) {
     //@ invariant i <= effects.length
-    //@ invariant mode === "allow" && state.done === true ==> state.res === true
-    //@ invariant mode === "deny" && state.done === true ==> state.res === false
+    //@ invariant implies(mode === "allow" && state.done === true, state.res === true)
+    //@ invariant implies(mode === "deny" && state.done === true, state.res === false)
     //@ decreases effects.length - i
     state = pushEffectStep(mode, effects[i], state);
     i = i + 1;

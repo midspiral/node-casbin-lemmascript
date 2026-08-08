@@ -6,9 +6,9 @@
 
 export function keyGet(key1: string, key2: string): string {
   //@ type pos int
-  //@ ensures key2.indexOf('*') === -1 ==> \result === ''
-  //@ ensures key1.length <= key2.indexOf('*') ==> \result === ''
-  //@ ensures key2.indexOf('*') >= 0 && key2.indexOf('*') <= key1.length && key2.indexOf('*') <= key2.length && key1.slice(0, key2.indexOf('*')) !== key2.slice(0, key2.indexOf('*')) ==> \result === ''
+  //@ ensures implies(key2.indexOf("*") === -1, $result === "")
+  //@ ensures implies(key1.length <= key2.indexOf("*"), $result === "")
+  //@ ensures implies(key2.indexOf("*") >= 0 && key2.indexOf("*") <= key1.length && key2.indexOf("*") <= key2.length && key1.slice(0, key2.indexOf("*")) !== key2.slice(0, key2.indexOf("*")), $result === "")
 
   const pos = key2.indexOf('*');
   if (pos === -1) {
