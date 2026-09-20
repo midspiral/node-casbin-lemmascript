@@ -4,10 +4,9 @@
 -/
 import «keyMatch.types»
 
-set_option loom.semantics.termination "total"
-set_option loom.semantics.choice "demonic"
+set_option velvet.semantics.termination "total"
 
-method keyMatch (key1 : String) (key2 : String) return (res : Bool)
-  ensures key1 = key2 → res = true
+method keyMatch (key1 : String) (key2 : String) returns (res : Bool)
+  ensures ensures_1: (key1 = key2 → res = true : Prop)
   do
     return Pure.keyMatch key1 key2
