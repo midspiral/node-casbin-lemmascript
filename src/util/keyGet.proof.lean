@@ -1,7 +1,6 @@
 import «keyGet.def»
 
-set_option loom.semantics.termination "total"
-set_option loom.semantics.choice "demonic"
+set_option velvet.semantics.termination "total"
 
 prove_correct keyGet by
-  unfold Pure.keyGet; loom_solve
+  velvet_vcgen [keyGet] with finish [Pure.keyGet]

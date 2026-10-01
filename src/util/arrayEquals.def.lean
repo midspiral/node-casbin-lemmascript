@@ -4,13 +4,12 @@
 -/
 import LemmaScript
 
-set_option loom.semantics.termination "total"
-set_option loom.semantics.choice "demonic"
+set_option velvet.semantics.termination "total"
 
-method arrayEquals (a : Array String) (b : Array String) return (res : Bool)
-  ensures res = true → a.size = b.size
-  ensures res = true → ∀ k : Nat, k < a.size → a[k]! = b[k]!
-  ensures res = false → a.size = b.size → ∃ k : Nat, k < a.size ∧ a[k]! ≠ b[k]!
+method arrayEquals (a : Array String) (b : Array String) returns (res : Bool)
+  ensures ensures_1: (res = true → a.size = b.size : Prop)
+  ensures ensures_2: (res = true → ∀ k : Nat, k < a.size → a[k]! = b[k]! : Prop)
+  ensures ensures_3: (res = false → a.size = b.size → ∃ k : Nat, k < a.size ∧ a[k]! ≠ b[k]! : Prop)
   do
     let aLen := a.size
     let bLen := b.size
@@ -19,11 +18,11 @@ method arrayEquals (a : Array String) (b : Array String) return (res : Bool)
     let mut result : Bool := true
     let mut i : Nat := 0
     while i < aLen
-      invariant i ≤ aLen
-      invariant result = true → ∀ k : Nat, k < i → a[k]! = b[k]!
-      invariant result = false → ∃ k : Nat, k < aLen ∧ a[k]! ≠ b[k]!
-      done_with result = false ∨ ¬(i < aLen)
+      invariant invariant_1: (i ≤ aLen : Prop)
+      invariant invariant_2: (result = true → ∀ k : Nat, k < i → a[k]! = b[k]! : Prop)
+      invariant invariant_3: (result = false → ∃ k : Nat, k < aLen ∧ a[k]! ≠ b[k]! : Prop)
       decreasing aLen - i
+      done_with (result = false ∨ ¬(i < aLen) : Prop)
     do
       if a[i]! ≠ b[i]! then
         result := false

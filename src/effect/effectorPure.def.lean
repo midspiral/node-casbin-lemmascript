@@ -4,29 +4,28 @@
 -/
 import «effectorPure.spec»
 
-set_option loom.semantics.termination "total"
-set_option loom.semantics.choice "demonic"
+set_option velvet.semantics.termination "total"
 
-method pushEffectStep (mode : Mode) (eft : Eft) (state : EffectState) return (res : EffectState)
-  ensures state.done = true → res = state
-  ensures state.done = false → mode = Mode.allow → eft = Eft.allow → res.res = true ∧ res.done = true
-  ensures state.done = false → mode = Mode.deny → eft = Eft.deny → res.res = false ∧ res.done = true
-  ensures state.done = false → mode = Mode.priority → eft ≠ Eft.indeterminate → res.done = true
-  ensures state.done = false → mode = Mode.priority → eft = Eft.allow → res.res = true
-  ensures state.done = false → mode = Mode.priority → eft = Eft.deny → res.res = false
-  ensures state.done = false → mode = Mode.allow → eft ≠ Eft.allow → res.done = false
-  ensures state.done = false → mode = Mode.deny → eft ≠ Eft.deny → res.done = false
+method pushEffectStep (mode : Mode) (eft : Eft) (state : EffectState) returns (res : EffectState)
+  ensures ensures_1: (state.done = true → res = state : Prop)
+  ensures ensures_2: (state.done = false → mode = Mode.allow → eft = Eft.allow → res.res = true ∧ res.done = true : Prop)
+  ensures ensures_3: (state.done = false → mode = Mode.deny → eft = Eft.deny → res.res = false ∧ res.done = true : Prop)
+  ensures ensures_4: (state.done = false → mode = Mode.priority → eft ≠ Eft.indeterminate → res.done = true : Prop)
+  ensures ensures_5: (state.done = false → mode = Mode.priority → eft = Eft.allow → res.res = true : Prop)
+  ensures ensures_6: (state.done = false → mode = Mode.priority → eft = Eft.deny → res.res = false : Prop)
+  ensures ensures_7: (state.done = false → mode = Mode.allow → eft ≠ Eft.allow → res.done = false : Prop)
+  ensures ensures_8: (state.done = false → mode = Mode.deny → eft ≠ Eft.deny → res.done = false : Prop)
   do
     return Pure.pushEffectStep mode eft state
 
-method processEffects (mode : Mode) (effects : Array Eft) return (res : EffectState)
+method processEffects (mode : Mode) (effects : Array Eft) returns (res : EffectState)
   do
     let mut state : EffectState := { res := false, recorded := false, done := false }
     let mut i : Nat := 0
     while i < effects.size
-      invariant i ≤ effects.size
-      invariant mode = Mode.allow → state.done = true → state.res = true
-      invariant mode = Mode.deny → state.done = true → state.res = false
+      invariant invariant_1: (i ≤ effects.size : Prop)
+      invariant invariant_2: (mode = Mode.allow → state.done = true → state.res = true : Prop)
+      invariant invariant_3: (mode = Mode.deny → state.done = true → state.res = false : Prop)
       decreasing effects.size - i
     do
       state ← pushEffectStep mode effects[i]! state

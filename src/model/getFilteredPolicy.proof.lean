@@ -1,7 +1,6 @@
 import «getFilteredPolicy.def»
 
-set_option loom.semantics.termination "total"
-set_option loom.semantics.choice "demonic"
+set_option velvet.semantics.termination "total"
 
 prove_correct ruleMatches by
-  loom_solve
+  velvet_vcgen [ruleMatches] with try finish
